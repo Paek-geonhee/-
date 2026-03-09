@@ -1,0 +1,21 @@
+On Replicated Functions
+
+개념
+- 어떤 변수가 "Replicate" 되어 값이 변할 경우 -> 즉, 서버에서 실행한 내용이 클라이언트에도 적용될 경우 실행되는 콜백 함수
+
+동작
+- 다음과 같이 선언된 변수가 있다고 하자.
+UPROPERTY(ReplicatedUsing = OnRep_ValueChanged)
+float MyValue;
+
+위 변수가 만약 서버에서 값이 수정된다면 클라이언트에도 해당 내용이 반영될 것임. 이때 클라이언트에서는 자동으로 OnRep_ValueChanged 함수를 수행함.
+
+주의
+- 서버에서는 OnRep 함수가 실행되지 않음. 즉 OnRep 함수는 Replicate의 대상인 클라이언트 환경에서만 실행됨. 
+- 만약 서버에서도 OnRep과 동일한 기능이 수행되어야 한다면 직접 실행하면 됨. (리슨 서버 환경에서는 유용)
+
+활용
+- 클라이언트 전용 인스턴스인 UI widget에 변경된 값을 반영하는 경우에 아주 유용함.
+EX ) MyComponent에 정의된 Level 변수가 Replicate 대상이며 이 값을 위젯에 보여줘야 할 경우, 초기화 단계에서 Level을 나타내는 위젯을 Component의 특정 델리게이트에 바인딩해두고, OnRep에서 브로드캐스팅 수행.
+EX ) 만약 값이 실제로 변하지 않아도 브로드캐스팅이 필요할 경우 / 편법 : 플래그 변수를 선언하여 해당 기능을 수행할때마다 스위치함. -> 해당 변수 역시  Replicate 대상으로 지정하고 같은 OnRep을 활용함
+
