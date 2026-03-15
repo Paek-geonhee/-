@@ -1,0 +1,21 @@
+ConstructorHelper::FClassFinder<UClassName> Var(FString Path)
+
+-> 생성자에서, 특정 BP 기반 클래스를 탐색하여 변수에 할당하기 위한 헬퍼 함수
+
+-> 컴파일 이후 게임을 시작하기 전에 이미 클래스를 찾아 할당이 가능하므로 C++ 소스 내에서 BP를 먼저 찾아두어야 할 경우에 유용함.
+
+실제 할당은 Var.Class를 이용할 수 있고, TSubclassOf 변수에 Assign하면 됨.
+TSubclassOf 는 인스턴스화되지않은 일종의 설계도에 해당함. 예를 들면 UserWidget 같은 경우 CreateWidget 함수를 통해 실제 인스턴스화를 시켜야 뷰포트에 올라가기 때문에 WBP는 TSubclassOf로 호환됨. 
+
+
+강의에서 사용한 방식
+- GameInstance에서 FClassFidner를 이용해 MainMenu WBP를 찾고, 내부 변수에 지정함.
+- BlueprintCallable 프로퍼티를 지정해 Level Blueprint의 BeginPlay에서 호출하여 Lobby 씬 구현(Only UI) (CreateWidget, AddToViewport)
+- ensure 매크로를 활용해 클래스를 찾지 못한 경우에 대한 예외처리도 수행
+- 인스턴스의 함수에서 PC를 호출하고, 가지고 있던 위젯과 프로퍼티를 맞춰주는 작업을 수행
+- SetInputMode를 이용해 마우스 입력의 포커스를 지정. -> FInputModeUIOnly
+
++ SetWidgetToFocus 함수를 써도되지만 보통 Widget->bIsFocusable = true를 쓰는게 나은듯
++ SWidget이 뭐지? : TakeWidget() 함수를 사용해 얻을 수 있음. - 포커스 지정을 위해선 SWidget으로 지정해야 함.
++ SetLockMouseToViewportBehavior 함수를 사용해 마우스를 어떻게 처리할 것인지 설정 가능. (잠금, 캡처)
++ 위 설정은 FInputModeData 변수를 지정한 뒤 해당 프로퍼티로써 처리해야 함.
