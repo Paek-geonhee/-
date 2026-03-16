@@ -1,0 +1,20 @@
+Set과 Unordered_set
+
+#include<set>
+Set은 Red-Black Tree를 기반으로 "정렬"된 상태를 유지하는 컨테이너임.
+삽입 -> insert(value) : O(logN)
+탐색 -> find(value) : O(logN)
+제거 -> erase(value) : O(logN)
+
+#include<unordered_set>
+반대로, Unordered set은 해시테이블 기반으로, "비정렬" 상태의 컨테이너임.
+삽입 -> insert(value) : O(1)
+탐색 -> find(value) : O(1)
+제거 -> erase(value) : O(1)
+
+두 컨테이너의 차이점은, 
+1. 정렬 상태 유지 / set - 정렬, unset - 비정렬
+2. 실행 시간 /  set - 느림, unset - 빠름
+
+find로 value를 찾지 못할 경우 us.end() 를 반환
+foreach문 활용해 순차 탐색 가능
